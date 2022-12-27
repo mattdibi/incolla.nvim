@@ -1,0 +1,7 @@
+# Ignore swap files
+*.swp
+
+# Ignore macOS hidden files
+*.DS_Store
+
+doc/tags

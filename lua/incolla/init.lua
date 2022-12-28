@@ -14,30 +14,23 @@ local create_dir = function(dir)
 end
 
 local determine_clipboard_content = function()
-    local get_clip_info = 'osascript -e "clipboard info"'
+    -- Retrieve clipboard info
+    local clip_info_handle = io.popen('osascript -e "clipboard info"')
+    local clip_info = clip_info_handle:read("*a")
+    clip_info_handle:close()
 
-    local outputs = io.popen(get_clip_info)
+    -- Retrieve header info
+    local reported_type = clip_info:match("[^,]+")
 
-    local command_output = ""
-    for output in outputs:lines() do
-        command_output = command_output .. output
-    end
-
-    local first_type = command_output:match("[^,]+")
-
-    if string.find(first_type, "PNGf") or string.find(first_type, "TIFF") then
+    if string.find(reported_type, "PNGf") or string.find(reported_type, "TIFF") then
         return Content.IMAGE
-    elseif string.find(first_type, "furl") then
-        local get_full_path = 'osascript -e "POSIX path of (the clipboard as «class furl»)"'
+    elseif string.find(reported_type, "furl") then
+        -- If clipboard type is file url, check it points to an actual image
+        local clip_path_handle = io.popen('osascript -e "POSIX path of (the clipboard as «class furl»)"')
+        local clip_path = clip_path_handle:read("*a")
+        clip_path_handle:close()
 
-        local path_outputs = io.popen(get_full_path)
-
-        local full_path = ""
-        for output in path_outputs:lines() do
-            full_path = full_path .. output
-        end
-
-        if string.find(full_path, ".png")  or string.find(full_path, ".jpg") or string.find(full_path, ".jpeg") then
+        if string.find(clip_path, ".png")  or string.find(clip_path, ".jpg") or string.find(clip_path, ".jpeg") then
             return Content.FURL
         else
             return Content.UNSUPPORTED

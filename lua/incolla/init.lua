@@ -1,5 +1,12 @@
 local M = {}
 
+-- Clipboard content
+local Content = {
+    IMAGE = "0",
+    FURL  = "1",
+    UNSUPPORTED = "2"
+}
+
 local create_dir = function(dir)
     if vim.fn.isdirectory(dir) == 0 then
         vim.fn.mkdir(dir, "p")
@@ -18,12 +25,9 @@ local determine_clipboard_content = function()
 
     local first_type = command_output:match("[^,]+")
 
-    if string.find(first_type, "PNGf") then
-        print("PNG")
-    elseif string.find(first_type, "TIFF") then
-        print("TIFF")
+    if string.find(first_type, "PNGf") or string.find(first_type, "TIFF") then
+        return Content.IMAGE
     elseif string.find(first_type, "furl") then
-        print("File url")
         local get_full_path = 'osascript -e "POSIX path of (the clipboard as «class furl»)"'
 
         local path_outputs = io.popen(get_full_path)
@@ -33,9 +37,13 @@ local determine_clipboard_content = function()
             full_path = full_path .. output
         end
 
-        print(full_path)
+        if string.find(full_path, ".png")  or string.find(full_path, ".jpg") or string.find(full_path, ".jpeg") then
+            return Content.FURL
+        else
+            return Content.UNSUPPORTED
+        end
     else
-        print("Dunnolol")
+        return Content.UNSUPPORTED
     end
 end
 
@@ -72,7 +80,7 @@ M.incolla = function()
     local target_folder_full_path = current_folder .. "/" .. imgdir
     local target_folder_rel_path = "./" .. imgdir
 
---     determine_clipboard_content()
+    local type = determine_clipboard_content()
 
     -- Create directory if missing
     create_dir(target_folder_full_path)

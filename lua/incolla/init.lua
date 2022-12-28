@@ -15,7 +15,7 @@ end
 
 local determine_clipboard_content = function()
     -- Retrieve clipboard info
-    local clip_info_handle = io.popen('osascript -e "clipboard info"')
+    local clip_info_handle = assert(io.popen('osascript -e "clipboard info"'))
     local clip_info = clip_info_handle:read("*a")
     clip_info_handle:close()
 
@@ -26,7 +26,7 @@ local determine_clipboard_content = function()
         return { Type = Content.IMAGE, Path = "" }
     elseif reported_type:find("furl") then
         -- If clipboard type is file url, check it points to an actual image
-        local clip_path_handle = io.popen('osascript -e "POSIX path of (the clipboard as «class furl»)"')
+        local clip_path_handle = assert(io.popen('osascript -e "POSIX path of (the clipboard as «class furl»)"'))
         local clip_path = clip_path_handle:read("*a")
         clip_path_handle:close()
 

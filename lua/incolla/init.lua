@@ -59,7 +59,7 @@ end
 --
 --@param target_folder Folder where the image will be saved to
 --@param file_name Name of the file to be written on disk
-local write_file = function(target_folder, file_name)
+local save_clipboard_to = function(target_folder, file_name)
     -- Copy image from clipboard
     local clip_command = 'osascript' ..
             ' -e "tell application \\"System Events\\" to' ..
@@ -70,18 +70,13 @@ local write_file = function(target_folder, file_name)
     os.execute(clip_command)
 end
 
--- Write image path in the current buffer
+-- Write text in the current buffer
 --
---@param target_folder Folder where the image was saved to
---@param file_name Name of the file written on disk
-local write_text = function(target_folder, file_name)
+--@param text Text to be written in the current buffer
+local write_text = function(text)
     local pos = vim.api.nvim_win_get_cursor(0)[2]
     local line = vim.api.nvim_get_current_line()
-
-    local text = string.format("![%s](%s/%s)", file_name, target_folder, file_name)
-
     local nline = line:sub(0, pos) .. text .. line:sub(pos + 1)
-
     vim.api.nvim_set_current_line(nline)
 end
 
@@ -114,7 +109,7 @@ M.incolla = function()
     if clip.Type == Content.IMAGE then
         -- Write new file to disk
         print("[Incolla]: Copy from clipboard")
-        write_file(target_folder_full_path, file_name)
+        save_clipboard_to(target_folder_full_path, file_name)
     elseif clip.Type == Content.FURL then
         -- Copy file to destination
         print("[Incolla]: Copy from file url")
@@ -124,7 +119,8 @@ M.incolla = function()
     end
 
     -- Add text at current position using relative path
-    write_text(target_folder_rel_path, file_name)
+    local text = string.format("![%s](%s/%s)", file_name, target_folder_rel_path, file_name)
+    write_text(text)
 end
 
 return M

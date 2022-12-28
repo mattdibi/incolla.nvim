@@ -22,15 +22,15 @@ local determine_clipboard_content = function()
     -- Retrieve header info
     local reported_type = clip_info:match("[^,]+")
 
-    if string.find(reported_type, "PNGf") or string.find(reported_type, "TIFF") then
+    if reported_type:find("PNGf") or reported_type:find("TIFF") then
         return { Type = Content.IMAGE, Path = "" }
-    elseif string.find(reported_type, "furl") then
+    elseif reported_type:find("furl") then
         -- If clipboard type is file url, check it points to an actual image
         local clip_path_handle = io.popen('osascript -e "POSIX path of (the clipboard as «class furl»)"')
         local clip_path = clip_path_handle:read("*a")
         clip_path_handle:close()
 
-        if string.find(clip_path, ".png")  or string.find(clip_path, ".jpg") or string.find(clip_path, ".jpeg") then
+        if clip_path:find(".png")  or clip_path:find(".jpg") or clip_path:find(".jpeg") then
             return { Type = Content.FURL, Path = clip_path }
         else
             return { Type = Content.UNSUPPORTED, Path = "" }

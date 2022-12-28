@@ -30,6 +30,8 @@ local determine_clipboard_content = function()
         local clip_path = clip_path_handle:read("*a")
         clip_path_handle:close()
 
+        -- WARNING: clip_path contains newline!
+
         if clip_path:find(".png")  or clip_path:find(".jpg") or clip_path:find(".jpeg") then
             return { Type = Content.FURL, Path = clip_path }
         else
@@ -74,7 +76,7 @@ M.incolla = function()
 
     local clip = determine_clipboard_content()
     if clip.Type == Content.UNSUPPORTED then
-        -- Do nothing
+        print("[Incolla]: Unsupported clipboard content")
         return
     end
 
@@ -83,9 +85,13 @@ M.incolla = function()
 
     -- Write new file to disk
     if clip.Type == Content.IMAGE then
+        print("[Incolla]: Copy from clipboard")
         write_file(target_folder_full_path, file_name)
     elseif clip.Type == Content.FURL then
         -- Copy file to destination
+        print("[Incolla]: Copy from file url")
+        local uv = vim.loop
+        assert(uv.fs_copyfile(clip.Path, target_folder_full_path .. "/" .. file_name))
     end
 
     -- Add text at current position

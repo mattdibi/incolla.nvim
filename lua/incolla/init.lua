@@ -30,7 +30,8 @@ local determine_clipboard_content = function()
         local clip_path = clip_path_handle:read("*a")
         clip_path_handle:close()
 
-        -- WARNING: clip_path contains newline!
+        -- Remove newlines from path
+        clip_path = clip_path:gsub("[\n\r]", "")
 
         if clip_path:find(".png")  or clip_path:find(".jpg") or clip_path:find(".jpeg") then
             return { Type = Content.FURL, Path = clip_path }

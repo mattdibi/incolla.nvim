@@ -84,7 +84,8 @@ end
 --
 --@param path The path string
 local basename = function(path)
-    return string.gsub(path, "(.*/)(.*)", "%2")
+    local name = string.gsub(path, "(.*/)(.*)", "%2")
+    return name
 end
 
 --- Main incolla.vim function

@@ -107,6 +107,12 @@ M.incolla = function()
         return
     end
 
+    local buf = vim.api.nvim_win_get_buf(0)
+    if vim.bo[buf].readonly then
+        print("[Incolla]: Buffer is readonly")
+        return
+    end
+
     -- Create directory if missing
     local file_name
 

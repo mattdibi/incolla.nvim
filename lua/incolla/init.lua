@@ -7,6 +7,12 @@ local Content = {
     UNSUPPORTED = "2"
 }
 
+--- Check if running on MacOS
+local is_mac_os = function()
+    local this_os = tostring(io.popen("uname"):read())
+    return this_os == "Darwin"
+end
+
 --- Check if directory at path exists, if not it creates one
 ---
 --@param dir Path of the directory to check
@@ -90,13 +96,10 @@ end
 
 --- Main incolla.vim function
 M.incolla = function()
-    local file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S.png")
-
-    local current_folder = vim.fn.expand('%:p:h')
-    local imgdir = "imgs"
-
-    local target_folder_full_path = current_folder .. "/" .. imgdir
-    local target_folder_rel_path = "./" .. imgdir
+    if not is_mac_os() then
+        print("[Incolla]: Unsupported OS")
+        return
+    end
 
     local clip = get_clipboard_info()
     if clip.Type == Content.UNSUPPORTED then
@@ -105,17 +108,26 @@ M.incolla = function()
     end
 
     -- Create directory if missing
+    local file_name
+
+    local current_folder = vim.fn.expand('%:p:h')
+    local imgdir = "imgs"
+
+    local target_folder_full_path = current_folder .. "/" .. imgdir
+    local target_folder_rel_path = "./" .. imgdir
+
     create_dir(target_folder_full_path)
 
     if clip.Type == Content.IMAGE then
         -- Write new file to disk
         print("[Incolla]: Copy from clipboard")
+        file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S.png")
         save_clipboard_to(target_folder_full_path, file_name)
     elseif clip.Type == Content.FURL then
         -- Copy file to destination
         print("[Incolla]: Copy from file url")
         local uv = vim.loop
-        file_name = basename(clip.Path) -- Overwrite filename with original
+        file_name = basename(clip.Path)
         assert(uv.fs_copyfile(clip.Path, target_folder_full_path .. "/" .. file_name))
     end
 

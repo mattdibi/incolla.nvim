@@ -91,19 +91,19 @@ end
 --- Main incolla.vim function
 M.incolla = function()
     if not is_mac_os() then
-        print("[Incolla]: Unsupported OS")
+        vim.notify("[Incolla]: Unsupported OS", vim.log.levels.ERROR)
         return
     end
 
     local clip = get_clipboard_info()
     if clip.Type == Content.UNSUPPORTED then
-        print("[Incolla]: Unsupported clipboard content")
+        vim.notify("[Incolla]: Unsupported clipboard content", vim.log.levels.WARN)
         return
     end
 
     local buf = vim.api.nvim_win_get_buf(0)
     if vim.bo[buf].readonly then
-        print("[Incolla]: Buffer is readonly")
+        vim.notify("[Incolla]: Buffer is readonly", vim.log.levels.WARN)
         return
     end
 
@@ -120,12 +120,12 @@ M.incolla = function()
 
     if clip.Type == Content.IMAGE then
         -- Write new file to disk
-        print("[Incolla]: Copy from clipboard")
+        vim.notify("[Incolla]: Copy from clipboard")
         file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S.png")
         save_clipboard_to(target_folder_full_path, file_name)
     elseif clip.Type == Content.FURL then
         -- Copy file to destination
-        print("[Incolla]: Copy from file url")
+        vim.notify("[Incolla]: Copy from file url")
         local uv = vim.loop
         file_name = basename(clip.Path)
         assert(uv.fs_copyfile(clip.Path, target_folder_full_path .. "/" .. file_name))

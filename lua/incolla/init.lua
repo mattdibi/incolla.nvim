@@ -7,7 +7,6 @@ local Content = {
     UNSUPPORTED = "2"
 }
 
-
 --- Check if directory at path exists, if not it creates one
 ---
 --@param dir Path of the directory to check
@@ -15,6 +14,13 @@ local create_dir = function(dir)
     if vim.fn.isdirectory(dir) == 0 then
         vim.fn.mkdir(dir, "p")
     end
+end
+
+--- Check if path points to image file (uses file extension)
+---
+--@param path Path to check
+local is_path_to_img = function(path)
+    return path:find(".png") ~= nil or path:find(".jpg") ~= nil or path:find(".jpeg") ~= nil
 end
 
 --- Get information about clipboard content
@@ -38,7 +44,7 @@ local get_clipboard_info = function()
         -- Remove newlines from path
         clip_path = clip_path:gsub("[\n\r]", "")
 
-        if clip_path:find(".png")  or clip_path:find(".jpg") or clip_path:find(".jpeg") then
+        if is_path_to_img(clip_path) then
             return { Type = Content.FURL, Path = clip_path }
         else
             return { Type = Content.UNSUPPORTED, Path = "" }
@@ -49,6 +55,10 @@ local get_clipboard_info = function()
 end
 
 
+-- Copy image from clipboard to disk
+--
+--@param target_folder Folder where the image will be saved to
+--@param file_name Name of the file to be written on disk
 local write_file = function(target_folder, file_name)
     -- Copy image from clipboard
     local clip_command = 'osascript' ..
@@ -60,6 +70,10 @@ local write_file = function(target_folder, file_name)
     os.execute(clip_command)
 end
 
+-- Write image path in the current buffer
+--
+--@param target_folder Folder where the image was saved to
+--@param file_name Name of the file written on disk
 local write_text = function(target_folder, file_name)
     local pos = vim.api.nvim_win_get_cursor(0)[2]
     local line = vim.api.nvim_get_current_line()
@@ -71,10 +85,14 @@ local write_text = function(target_folder, file_name)
     vim.api.nvim_set_current_line(nline)
 end
 
+--- Function equivalent to basename in POSIX systems
+--
+--@param path The path string
 local basename = function(path)
     return string.gsub(path, "(.*/)(.*)", "%2")
 end
 
+--- Main incolla.vim function
 M.incolla = function()
     local file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S.png")
 

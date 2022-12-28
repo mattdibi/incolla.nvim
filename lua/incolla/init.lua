@@ -7,13 +7,18 @@ local Content = {
     UNSUPPORTED = "2"
 }
 
+
+--- Check if directory at path exists, if not it creates one
+---
+--@param dir Path of the directory to check
 local create_dir = function(dir)
     if vim.fn.isdirectory(dir) == 0 then
         vim.fn.mkdir(dir, "p")
     end
 end
 
-local determine_clipboard_content = function()
+--- Get information about clipboard content
+local get_clipboard_info = function()
     -- Retrieve clipboard info
     local clip_info_handle = assert(io.popen('osascript -e "clipboard info"'))
     local clip_info = clip_info_handle:read("*a")
@@ -66,6 +71,10 @@ local write_text = function(target_folder, file_name)
     vim.api.nvim_set_current_line(nline)
 end
 
+local basename = function(path)
+    return string.gsub(path, "(.*/)(.*)", "%2")
+end
+
 M.incolla = function()
     local file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S.png")
 
@@ -75,7 +84,7 @@ M.incolla = function()
     local target_folder_full_path = current_folder .. "/" .. imgdir
     local target_folder_rel_path = "./" .. imgdir
 
-    local clip = determine_clipboard_content()
+    local clip = get_clipboard_info()
     if clip.Type == Content.UNSUPPORTED then
         print("[Incolla]: Unsupported clipboard content")
         return
@@ -84,18 +93,19 @@ M.incolla = function()
     -- Create directory if missing
     create_dir(target_folder_full_path)
 
-    -- Write new file to disk
     if clip.Type == Content.IMAGE then
+        -- Write new file to disk
         print("[Incolla]: Copy from clipboard")
         write_file(target_folder_full_path, file_name)
     elseif clip.Type == Content.FURL then
         -- Copy file to destination
         print("[Incolla]: Copy from file url")
         local uv = vim.loop
+        file_name = basename(clip.Path) -- Overwrite filename with original
         assert(uv.fs_copyfile(clip.Path, target_folder_full_path .. "/" .. file_name))
     end
 
-    -- Add text at current position
+    -- Add text at current position using relative path
     write_text(target_folder_rel_path, file_name)
 end
 

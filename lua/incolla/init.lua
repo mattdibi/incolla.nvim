@@ -35,6 +35,7 @@ local is_path_to_img = function(path)
 end
 
 --- Get information about clipboard content
+---@return table: Table containing the Content, Ext and Path
 local get_clipboard_info = function()
     -- Retrieve clipboard info
     local clip_info = tostring(io.popen('osascript -e "clipboard info"'):read())
@@ -42,7 +43,7 @@ local get_clipboard_info = function()
     local reported_type = clip_info:match("[^,]+")
 
     if reported_type:find("PNGf") or reported_type:find("TIFF") then
-        return { Type = Content.IMAGE, Path = "" }
+        return { Type = Content.IMAGE, Path = "" , Ext = ".png"}
     elseif reported_type:find("furl") then
         -- If clipboard type is file url, check it points to an actual image
         local clip_path = tostring(io.popen('osascript -e "POSIX path of (the clipboard as «class furl»)"'):read())
@@ -50,12 +51,13 @@ local get_clipboard_info = function()
         clip_path = clip_path:gsub("[\n\r]", "")
 
         if is_path_to_img(clip_path) then
-            return { Type = Content.FURL, Path = clip_path }
+            local extension = clip_path:match("^.+(%..+)$")
+            return { Type = Content.FURL, Path = clip_path, Ext = extension }
         else
-            return { Type = Content.UNSUPPORTED, Path = "" }
+            return { Type = Content.UNSUPPORTED, Path = "", Ext = "" }
         end
     else
-        return { Type = Content.UNSUPPORTED, Path = "" }
+        return { Type = Content.UNSUPPORTED, Path = "", Ext = "" }
     end
 end
 
@@ -103,14 +105,6 @@ local write_text = function(text)
     vim.api.nvim_set_current_line(nline)
 end
 
---- Function equivalent to basename in POSIX systems
---
----@param path string: The path string
-local basename = function(path)
-    local name = string.gsub(path, "(.*/)(.*)", "%2")
-    return name
-end
-
 --- Main incolla.nvim function
 M.incolla = function()
     local clip = get_clipboard_info()
@@ -125,31 +119,28 @@ M.incolla = function()
         return
     end
 
-    local file_name
-
-    local current_folder = vim.fn.expand('%:p:h')
+    local file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S") .. clip.Ext
     local imgdir = "imgs"
 
-    local target_folder_full_path = current_folder .. "/" .. imgdir
-    local target_folder_rel_path = "./" .. imgdir
+    local dir_path = string.format("%s/%s", vim.fn.expand('%:p:h'), imgdir)
+    local dst_path = string.format("%s/%s/%s", vim.fn.expand('%:p:h'), imgdir, file_name)
 
     -- Create directory if missing
-    create_dir(target_folder_full_path)
+    create_dir(dir_path)
 
     if clip.Type == Content.IMAGE then
         -- Write new file to disk
         notify("Copy from clipboard", level.INFO)
-        file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S.png")
-        save_clipboard_to(target_folder_full_path .. "/".. file_name)
+        save_clipboard_to(dst_path)
     elseif clip.Type == Content.FURL then
         -- Copy file to destination
         notify("Copy from file url", level.INFO)
-        file_name = basename(clip.Path)
-        assert(uv.fs_copyfile(clip.Path, target_folder_full_path .. "/" .. file_name))
+        assert(uv.fs_copyfile(clip.Path, dst_path))
     end
 
     -- Add text at current position using relative path
-    local text = string.format("![%s](%s/%s)", file_name, target_folder_rel_path, file_name)
+    local rel_path = string.format("./%s/%s", imgdir, file_name)
+    local text = string.format("![%s](%s)", file_name, rel_path)
     write_text(text)
 end
 

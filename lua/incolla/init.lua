@@ -136,7 +136,6 @@ M.incolla = function()
         return
     end
 
-    -- Create directory if missing
     local file_name
 
     local current_folder = vim.fn.expand('%:p:h')
@@ -145,6 +144,7 @@ M.incolla = function()
     local target_folder_full_path = current_folder .. "/" .. imgdir
     local target_folder_rel_path = "./" .. imgdir
 
+    -- Create directory if missing
     create_dir(target_folder_full_path)
 
     if clip.Type == Content.IMAGE then

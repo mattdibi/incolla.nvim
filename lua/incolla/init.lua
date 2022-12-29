@@ -38,23 +38,35 @@ local is_path_to_img = function(path)
            extension == "webp"
 end
 
+--- Get clipboard content informations using osascript
+---@return string
+local osascript_get_clip_content = function()
+    local clip_info = tostring(io.popen('osascript -e "clipboard info"'):read())
+    -- Retrieve header info (i.e. up until the first ",")
+    local trimmed_info = clip_info:match("[^,]+")
+    return trimmed_info
+end
+
+--- Get clipboard POSIX path using osascript
+---@return string
+local osascript_get_clip_path = function()
+    local clip_path = tostring(io.popen('osascript -e "POSIX path of (the clipboard as «class furl»)"'):read())
+    -- Remove newlines from path
+    clip_path = clip_path:gsub("[\n\r]", "")
+    return clip_path
+end
+
 --- Get information about clipboard content
 ---@return table: Table containing the Content, Ext and Path
 local get_clipboard_info = function()
-    -- Retrieve clipboard info
-    local clip_info = tostring(io.popen('osascript -e "clipboard info"'):read())
-    -- Retrieve header info
-    local reported_type = clip_info:match("[^,]+")
+    local reported_type = osascript_get_clip_content()
 
     if reported_type:find("PNGf") or reported_type:find("TIFF") then
         return { Type = Content.IMAGE, Path = "" , Ext = ".png"}
     end
 
     if reported_type:find("furl") then
-        -- If clipboard type is file url, check it points to an actual image
-        local clip_path = tostring(io.popen('osascript -e "POSIX path of (the clipboard as «class furl»)"'):read())
-        -- Remove newlines from path
-        clip_path = clip_path:gsub("[\n\r]", "")
+        local clip_path = osascript_get_clip_path()
 
         if is_path_to_img(clip_path) then
             local extension = "." .. vim.fn.fnamemodify(clip_path, ":e")

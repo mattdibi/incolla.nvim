@@ -107,15 +107,15 @@ end
 
 --- Main incolla.nvim function
 M.incolla = function()
-    local clip = get_clipboard_info()
-    if clip.Type == Content.UNSUPPORTED then
-        notify("Unsupported clipboard content", level.WARN)
-        return
-    end
-
     local buf = vim.api.nvim_win_get_buf(0)
     if vim.bo[buf].readonly then
         notify("Buffer is readonly", level.WARN)
+        return
+    end
+
+    local clip = get_clipboard_info()
+    if clip.Type == Content.UNSUPPORTED then
+        notify("Unsupported clipboard content", level.WARN)
         return
     end
 

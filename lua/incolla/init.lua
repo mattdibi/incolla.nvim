@@ -126,6 +126,8 @@ M.incolla = function()
     local file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S") .. clip.Ext -- TODO: Configurable
     local imgdir = "imgs" -- TODO: Configurable
 
+    -- Compute destination path
+    -- NOTE: It's always relative to *the file open in the current buffer*
     local dir_path = string.format("%s/%s", vim.fn.expand('%:p:h'), imgdir)
     local dst_path = string.format("%s/%s/%s", vim.fn.expand('%:p:h'), imgdir, file_name)
 

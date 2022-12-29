@@ -31,7 +31,11 @@ end
 ---
 ---@param path string: Path to check
 local is_path_to_img = function(path)
-    return path:find(".png") ~= nil or path:find(".jpg") ~= nil or path:find(".jpeg") ~= nil
+    local extension = path:match("^.+(%..+)$")
+    return extension == ".png" or
+           extension == ".jpg" or
+           extension == ".jpeg" or
+           extension == ".webp"
 end
 
 --- Get information about clipboard content

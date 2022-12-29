@@ -140,7 +140,7 @@ M.incolla = function()
 
     -- Add text at current position using relative path
     local rel_path = string.format("./%s/%s", imgdir, file_name)
-    local text = string.format("![%s](%s)", file_name, rel_path)
+    local text = string.format("![%s](%s)", file_name, rel_path) -- TODO: Configurable
     write_text(text)
 end
 

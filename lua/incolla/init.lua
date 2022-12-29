@@ -1,5 +1,7 @@
 local M = {}
 
+local uv = vim.loop
+
 -- Clipboard content
 local Content = {
     IMAGE = "0",
@@ -54,20 +56,38 @@ local get_clipboard_info = function()
     end
 end
 
+-- Generate random string for temporary file
+local generate_random_string = function()
+    math.randomseed(os.time())
+    local random = "incolla_"
+    for _ = 1, 20 do
+        random = random .. string.char(math.random(97, 97 + 25))
+    end
 
--- Copy image from clipboard to disk
+    return random
+end
+
+-- Save image from clipboard to disk
 --
---@param target_folder Folder where the image will be saved to
---@param file_name Name of the file to be written on disk
-local save_clipboard_to = function(target_folder, file_name)
-    -- Copy image from clipboard
+--@param dst_path Path where the image will be saved to
+local save_clipboard_to = function(dst_path)
+    -- Generate random tmp file. We need to do this because
+    -- osascript requires folder and filename but we want to
+    -- use only a path as function parameter
+    local tmpdir = uv.os_tmpdir()
+    local randname = generate_random_string()
+    local tmp_path = string.format("%s/%s", tmpdir, randname)
+
+    -- Save image as PNG from clipboard to tmp_path
     local clip_command = 'osascript' ..
             ' -e "tell application \\"System Events\\" to' ..
             ' write (the clipboard as «class PNGf») to' ..
-            ' (make new file at folder \\"' .. target_folder .. '\\"' ..
-            ' with properties {name:\\"'.. file_name .. '\\"})"'
-
+            ' (make new file at folder \\"' .. tmpdir .. '\\"' ..
+            ' with properties {name:\\"'.. randname .. '\\"})"'
     os.execute(clip_command)
+
+    assert(uv.fs_copyfile(tmp_path, dst_path))
+    assert(os.remove(tmp_path))
 end
 
 -- Write text in the current buffer
@@ -122,11 +142,10 @@ M.incolla = function()
         -- Write new file to disk
         vim.notify("[Incolla]: Copy from clipboard")
         file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S.png")
-        save_clipboard_to(target_folder_full_path, file_name)
+        save_clipboard_to(target_folder_full_path .. "/".. file_name)
     elseif clip.Type == Content.FURL then
         -- Copy file to destination
         vim.notify("[Incolla]: Copy from file url")
-        local uv = vim.loop
         file_name = basename(clip.Path)
         assert(uv.fs_copyfile(clip.Path, target_folder_full_path .. "/" .. file_name))
     end

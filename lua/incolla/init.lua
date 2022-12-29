@@ -31,11 +31,11 @@ end
 ---
 ---@param path string: Path to check
 local is_path_to_img = function(path)
-    local extension = path:match("^.+(%..+)$")
-    return extension == ".png" or
-           extension == ".jpg" or
-           extension == ".jpeg" or
-           extension == ".webp"
+    local extension = vim.fn.fnamemodify(path, ":e")
+    return extension == "png" or
+           extension == "jpg" or
+           extension == "jpeg" or
+           extension == "webp"
 end
 
 --- Get information about clipboard content
@@ -55,7 +55,7 @@ local get_clipboard_info = function()
         clip_path = clip_path:gsub("[\n\r]", "")
 
         if is_path_to_img(clip_path) then
-            local extension = clip_path:match("^.+(%..+)$")
+            local extension = "." .. vim.fn.fnamemodify(clip_path, ":e")
             return { Type = Content.FURL, Path = clip_path, Ext = extension }
         else
             return { Type = Content.UNSUPPORTED, Path = "", Ext = "" }

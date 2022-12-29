@@ -1,6 +1,7 @@
 local M = {}
 
 local uv = vim.loop
+local level = vim.log.levels
 
 -- Clipboard content
 local Content = {
@@ -8,6 +9,14 @@ local Content = {
     FURL  = "1",
     UNSUPPORTED = "2"
 }
+
+--- Wrapper around vim.notify
+---
+---@param msg string: Log message
+---@param lvl number: One of the values from vim.log.levels
+local notify = function(msg, lvl)
+    vim.notify(string.format("[Incolla]: %s", msg), lvl)
+end
 
 --- Check if running on MacOS
 local is_mac_os = function()
@@ -17,7 +26,7 @@ end
 
 --- Check if directory at path exists, if not it creates one
 ---
---@param dir Path of the directory to check
+---@param dir string: Path of the directory to check
 local create_dir = function(dir)
     if vim.fn.isdirectory(dir) == 0 then
         vim.fn.mkdir(dir, "p")
@@ -26,7 +35,7 @@ end
 
 --- Check if path points to image file (uses file extension)
 ---
---@param path Path to check
+---@param path string: Path to check
 local is_path_to_img = function(path)
     return path:find(".png") ~= nil or path:find(".jpg") ~= nil or path:find(".jpeg") ~= nil
 end
@@ -69,7 +78,7 @@ end
 
 -- Save image from clipboard to disk
 --
---@param dst_path Path where the image will be saved to
+---@param dst_path string: Path where the image will be saved to
 local save_clipboard_to = function(dst_path)
     -- Generate random tmp file. We need to do this because
     -- osascript requires folder and filename but we want to
@@ -92,7 +101,7 @@ end
 
 -- Write text in the current buffer
 --
---@param text Text to be written in the current buffer
+--@param text string: Text to be written in the current buffer
 local write_text = function(text)
     local pos = vim.api.nvim_win_get_cursor(0)[2]
     local line = vim.api.nvim_get_current_line()
@@ -102,7 +111,7 @@ end
 
 --- Function equivalent to basename in POSIX systems
 --
---@param path The path string
+---@param path string: The path string
 local basename = function(path)
     local name = string.gsub(path, "(.*/)(.*)", "%2")
     return name
@@ -111,19 +120,19 @@ end
 --- Main incolla.nvim function
 M.incolla = function()
     if not is_mac_os() then
-        vim.notify("[Incolla]: Unsupported OS", vim.log.levels.ERROR)
+        notify("Unsupported OS", level.ERROR)
         return
     end
 
     local clip = get_clipboard_info()
     if clip.Type == Content.UNSUPPORTED then
-        vim.notify("[Incolla]: Unsupported clipboard content", vim.log.levels.WARN)
+        notify("Unsupported clipboard content", level.WARN)
         return
     end
 
     local buf = vim.api.nvim_win_get_buf(0)
     if vim.bo[buf].readonly then
-        vim.notify("[Incolla]: Buffer is readonly", vim.log.levels.WARN)
+        notify("Buffer is readonly", level.WARN)
         return
     end
 
@@ -140,12 +149,12 @@ M.incolla = function()
 
     if clip.Type == Content.IMAGE then
         -- Write new file to disk
-        vim.notify("[Incolla]: Copy from clipboard")
+        notify("Copy from clipboard", level.INFO)
         file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S.png")
         save_clipboard_to(target_folder_full_path .. "/".. file_name)
     elseif clip.Type == Content.FURL then
         -- Copy file to destination
-        vim.notify("[Incolla]: Copy from file url")
+        notify("Copy from file url", level.INFO)
         file_name = basename(clip.Path)
         assert(uv.fs_copyfile(clip.Path, target_folder_full_path .. "/" .. file_name))
     end

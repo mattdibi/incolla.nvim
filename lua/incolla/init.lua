@@ -18,12 +18,6 @@ local notify = function(msg, lvl)
     vim.notify(string.format("[Incolla]: %s", msg), lvl)
 end
 
---- Check if running on MacOS
-local is_mac_os = function()
-    local this_os = tostring(io.popen("uname"):read())
-    return this_os == "Darwin"
-end
-
 --- Check if directory at path exists, if not it creates one
 ---
 ---@param dir string: Path of the directory to check
@@ -119,11 +113,6 @@ end
 
 --- Main incolla.nvim function
 M.incolla = function()
-    if not is_mac_os() then
-        notify("Unsupported OS", level.ERROR)
-        return
-    end
-
     local clip = get_clipboard_info()
     if clip.Type == Content.UNSUPPORTED then
         notify("Unsupported clipboard content", level.WARN)

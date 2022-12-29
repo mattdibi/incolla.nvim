@@ -88,7 +88,7 @@ local basename = function(path)
     return name
 end
 
---- Main incolla.vim function
+--- Main incolla.nvim function
 M.incolla = function()
     if not is_mac_os() then
         vim.notify("[Incolla]: Unsupported OS", vim.log.levels.ERROR)

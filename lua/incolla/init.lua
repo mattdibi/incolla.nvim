@@ -128,10 +128,10 @@ M.incolla = function()
 
     -- Compute destination path
     -- NOTE: It's always relative to *the file open in the current buffer*
-    local dir_path = string.format("%s/%s", vim.fn.expand('%:p:h'), imgdir)
     local dst_path = string.format("%s/%s/%s", vim.fn.expand('%:p:h'), imgdir, file_name)
 
     -- Create directory if missing
+    local dir_path = vim.fn.fnamemodify(dst_path, ":p:h")
     create_dir(dir_path)
 
     if clip.Type == Content.IMAGE then

@@ -119,8 +119,8 @@ M.incolla = function()
         return
     end
 
-    local file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S") .. clip.Ext
-    local imgdir = "imgs"
+    local file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S") .. clip.Ext -- TODO: Configurable
+    local imgdir = "imgs" -- TODO: Configurable
 
     local dir_path = string.format("%s/%s", vim.fn.expand('%:p:h'), imgdir)
     local dst_path = string.format("%s/%s/%s", vim.fn.expand('%:p:h'), imgdir, file_name)

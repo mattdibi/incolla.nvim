@@ -48,7 +48,9 @@ local get_clipboard_info = function()
 
     if reported_type:find("PNGf") or reported_type:find("TIFF") then
         return { Type = Content.IMAGE, Path = "" , Ext = ".png"}
-    elseif reported_type:find("furl") then
+    end
+
+    if reported_type:find("furl") then
         -- If clipboard type is file url, check it points to an actual image
         local clip_path = tostring(io.popen('osascript -e "POSIX path of (the clipboard as «class furl»)"'):read())
         -- Remove newlines from path
@@ -57,12 +59,10 @@ local get_clipboard_info = function()
         if is_path_to_img(clip_path) then
             local extension = "." .. vim.fn.fnamemodify(clip_path, ":e")
             return { Type = Content.FURL, Path = clip_path, Ext = extension }
-        else
-            return { Type = Content.UNSUPPORTED, Path = "", Ext = "" }
         end
-    else
-        return { Type = Content.UNSUPPORTED, Path = "", Ext = "" }
     end
+
+    return { Type = Content.UNSUPPORTED, Path = "", Ext = "" }
 end
 
 -- Generate random string for temporary file

@@ -16,6 +16,14 @@ _Neovim Lua plugin to paste images from MacOS clipboard_
 - Easy extensibility and configuration
 - Written entirely in Lua
 
+### Installation
+
+Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
+
+```lua
+use 'mattdibi/incolla.nvim'
+```
+
 ### Configuration
 
 **Example**

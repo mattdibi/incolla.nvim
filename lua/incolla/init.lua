@@ -164,7 +164,7 @@ M.incolla = function()
         return
     end
 
-    local file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S") .. clip.Ext -- TODO: Configurable
+    local file_name = config.options.img_name() .. clip.Ext
     local imgdir = config.options.img_dir
 
     -- Compute destination path

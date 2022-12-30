@@ -27,7 +27,7 @@ require("incolla").setup {
     options = {
         img_dir = "imgs",
         img_name = function()
-            return "test"
+            return os.date('%Y-%m-%d-%H-%M-%S')
         end,
         affix = "![](%s)",
     }

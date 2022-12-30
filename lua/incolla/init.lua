@@ -164,11 +164,14 @@ M.incolla = function()
         return
     end
 
-    local file_name = config.options.img_name() .. clip.Ext
-    local imgdir = config.options.img_dir
+    -- Compute filename
+    local configured_name = config.options.img_name()
+    assert(type(configured_name) == "string")
+    local file_name = configured_name .. clip.Ext
 
     -- Compute destination path
     -- NOTE: It's always relative to *the file open in the current buffer*
+    local imgdir = config.options.img_dir
     local dst_path = string.format("%s/%s/%s", vim.fn.expand('%:p:h'), imgdir, file_name)
 
     if file_exists(dst_path) then

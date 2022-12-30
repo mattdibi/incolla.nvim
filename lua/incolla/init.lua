@@ -3,6 +3,8 @@ local M = {}
 local uv = vim.loop
 local level = vim.log.levels
 
+local config = require("incolla.config")
+
 -- Clipboard content
 local Content = {
     IMAGE = "0",
@@ -129,6 +131,25 @@ local write_text = function(text)
     vim.api.nvim_set_current_line(nline)
 end
 
+--- Setup function to be run by user. Configures incolla.nvim
+---
+--- Usage:
+--- <code>
+--- require('incolla').setup{
+---   options = {
+---     -- Configuration for incolla.nvim goes here:
+---     -- key = value,
+---     -- ..
+---   },
+--- }
+--- </code>
+---@param opts table: Configuration opts.
+M.setup = function(opts)
+    opts = opts or {}
+
+    config.set(opts.options)
+end
+
 --- Main incolla.nvim function
 M.incolla = function()
     local buf = vim.api.nvim_win_get_buf(0)
@@ -144,7 +165,7 @@ M.incolla = function()
     end
 
     local file_name = os.date("IMG-%d-%m-%Y-%H-%M-%S") .. clip.Ext -- TODO: Configurable
-    local imgdir = "imgs" -- TODO: Configurable
+    local imgdir = config.options.img_dir
 
     -- Compute destination path
     -- NOTE: It's always relative to *the file open in the current buffer*
@@ -171,7 +192,7 @@ M.incolla = function()
 
     -- Add text at current position using relative path
     local rel_path = string.format("./%s/%s", imgdir, file_name)
-    local text = string.format("![%s](%s)", file_name, rel_path) -- TODO: Configurable
+    local text = string.format(config.options.affix, rel_path)
     write_text(text)
 end
 

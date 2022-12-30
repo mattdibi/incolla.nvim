@@ -27,6 +27,14 @@ local create_dir = function(dir)
     end
 end
 
+--- Check if file at path exists
+---
+---@param path string: Path to be checked
+local file_exists = function(path)
+   local f = io.open(path, "r")
+   return f ~= nil and io.close(f)
+end
+
 --- Check if path points to image file (uses file extension)
 ---
 ---@param path string: Path to check
@@ -141,6 +149,11 @@ M.incolla = function()
     -- Compute destination path
     -- NOTE: It's always relative to *the file open in the current buffer*
     local dst_path = string.format("%s/%s/%s", vim.fn.expand('%:p:h'), imgdir, file_name)
+
+    if file_exists(dst_path) then
+        notify("File already exists at destination path", level.WARN)
+        return
+    end
 
     -- Create directory if missing
     local dir_path = vim.fn.fnamemodify(dst_path, ":p:h")

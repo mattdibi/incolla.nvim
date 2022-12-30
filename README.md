@@ -15,3 +15,21 @@ _Neovim Lua plugin to paste images from MacOS clipboard_
 - Multiple image format supported (JPG, PNG ...)
 - Easy extensibility and configuration
 - Written entirely in Lua
+
+### Configuration
+
+**Example**
+
+In you Neovim configuration directory, create a new file inside the `after/plugin` directory with the following:
+
+```lua
+require("incolla").setup {
+    options = {
+        img_dir = "imgs",
+        img_name = function()
+            return "test"
+        end,
+        affix = "![](%s)",
+    }
+}
+```

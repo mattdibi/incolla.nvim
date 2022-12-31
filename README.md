@@ -24,6 +24,10 @@ Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
 use 'mattdibi/incolla.nvim'
 ```
 
+### Usage
+
+![IncollaBasic](https://user-images.githubusercontent.com/22748355/210149651-35b770fc-b4de-4cd3-b3e0-f8d7d62bac23.gif)
+
 ### Configuration
 
 Incolla.nvim doesn't require any configuration to work out-of-the box. The default configuration is the following:

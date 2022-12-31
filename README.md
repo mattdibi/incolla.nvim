@@ -9,14 +9,14 @@ _Neovim Lua plugin to paste images from MacOS clipboard_
 
 </div>
 
-### Features
+### ✨ Features
 
 - No dependencies
 - Multiple image format supported (JPG, PNG ...)
 - Easy extensibility and configuration
 - Written entirely in Lua
 
-### Installation
+### 📦 Installation
 
 Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
 
@@ -24,7 +24,7 @@ Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
 use 'mattdibi/incolla.nvim'
 ```
 
-### Usage
+### 🚀 Usage
 
 **Paste screenshot from clipboard**
 
@@ -44,12 +44,12 @@ use 'mattdibi/incolla.nvim'
 
 </details>
 
-### Configuration
+### ⚙️ Configuration
 
 Incolla.nvim doesn't require any configuration to work out-of-the box. The default configuration is the following:
 
 ```lua
-local DEFAULTS = {
+defaults = {
     img_dir = "imgs",
     img_name = function()
         return os.date("IMG-%d-%m-%Y-%H-%M-%S")
@@ -82,7 +82,7 @@ require("incolla").setup {
     },
     -- You can customize the behaviour for a filetype by creating a field named after the desired filetype
     -- If you're uncertain what to name your field to, you can run `lua print(vim.bo.filetype)`
-    -- Missing options from `<filetype>` field will be replaced by the `DEFAULT` options
+    -- Missing options from `<filetype>` field will be replaced by the default configuration
     markdown = {
         affix = "![](%s)",
     }

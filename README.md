@@ -110,7 +110,7 @@ nnoremap <leader>xp :Incolla<CR>
 
 </details>
 
-### Credits
+### 🌟 Credits
 
 Thanks to:
 - [ekickx/clipboard-image.nvim](https://github.com/ekickx/clipboard-image.nvim)

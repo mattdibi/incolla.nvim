@@ -49,6 +49,18 @@ require("incolla").setup {
 }
 ```
 
+**Setting your keymap**
+
+```lua
+-- This maps the paste command to <leader>xp
+vim.api.nvim_set_keymap('n', '<leader>xp', '', {
+    noremap = true,
+    callback = function()
+        require'incolla'.incolla()
+    end,
+})
+```
+
 ### Credits
 
 Thanks to:

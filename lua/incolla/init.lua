@@ -5,6 +5,7 @@ local level = vim.log.levels
 
 local config = require("incolla.config")
 local clipboard = require("incolla.clipboard")
+local fsutils = require("incolla.fsutils")
 
 --- Wrapper around vim.notify
 ---
@@ -12,23 +13,6 @@ local clipboard = require("incolla.clipboard")
 ---@param lvl number: One of the values from vim.log.levels
 local notify = function(msg, lvl)
     vim.notify(string.format("[Incolla]: %s", msg), lvl)
-end
-
---- Check if directory at path exists, if not it creates one
----
----@param dir string: Path of the directory to check
-local create_dir = function(dir)
-    if vim.fn.isdirectory(dir) == 0 then
-        vim.fn.mkdir(dir, "p")
-    end
-end
-
---- Check if file at path exists
----
----@param path string: Path to be checked
-local file_exists = function(path)
-   local f = io.open(path, "r")
-   return f ~= nil and io.close(f)
 end
 
 -- Write text in the current buffer
@@ -84,14 +68,14 @@ M.incolla = function()
     local imgdir = config.options.img_dir
     local dst_path = string.format("%s/%s/%s", vim.fn.expand('%:p:h'), imgdir, file_name)
 
-    if file_exists(dst_path) then
+    if fsutils.file_exists(dst_path) then
         notify("File already exists at destination path", level.WARN)
         return
     end
 
     -- Create directory if missing
     local dir_path = vim.fn.fnamemodify(dst_path, ":p:h")
-    create_dir(dir_path)
+    fsutils.create_dir(dir_path)
 
     if clip.Type == clipboard.Content.IMAGE then
         -- Write new file to disk

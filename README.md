@@ -26,7 +26,18 @@ use 'mattdibi/incolla.nvim'
 
 ### Usage
 
-![IncollaBasic](https://user-images.githubusercontent.com/22748355/210149651-35b770fc-b4de-4cd3-b3e0-f8d7d62bac23.gif)
+**Paste image from clipboard screenshot**
+
+![IncollaBasic](https://user-images.githubusercontent.com/22748355/210150002-135316ea-5574-443c-b71b-cc089784df7e.gif)
+
+**Paste image from clipboard URL**
+
+![IncollaURL](https://user-images.githubusercontent.com/22748355/210150024-41c94e32-d688-4e8a-bb68-c42c1c8fbf7b.gif)
+
+**Paste image copied from the browser**
+
+![IncollaBrowser](https://user-images.githubusercontent.com/22748355/210150032-376ead8a-ff21-433e-a9f0-7dec4ac58fd5.gif)
+
 
 ### Configuration
 

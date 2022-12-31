@@ -1,0 +1,96 @@
+local M = {}
+
+local uv = vim.loop
+
+--- Check if path points to image file (uses file extension)
+---
+---@param path string: Path to check
+local is_path_to_img = function(path)
+    local extension = vim.fn.fnamemodify(path, ":e")
+    return extension == "png" or
+           extension == "jpg" or
+           extension == "jpeg" or
+           extension == "webp"
+end
+
+-- Generate random string for temporary file
+local generate_random_string = function()
+    math.randomseed(os.time())
+    local random = "incolla_"
+    for _ = 1, 20 do
+        random = random .. string.char(math.random(97, 97 + 25))
+    end
+
+    return random
+end
+
+--- Get clipboard content informations using osascript
+---@return string
+local osascript_get_clip_content = function()
+    local clip_info = tostring(io.popen('osascript -e "clipboard info"'):read())
+    -- Retrieve header info (i.e. up until the first ",")
+    local trimmed_info = clip_info:match("[^,]+")
+    return trimmed_info
+end
+
+--- Get clipboard POSIX path using osascript
+---@return string
+local osascript_get_clip_path = function()
+    local clip_path = tostring(io.popen('osascript -e "POSIX path of (the clipboard as «class furl»)"'):read())
+    -- Remove newlines from path
+    clip_path = clip_path:gsub("[\n\r]", "")
+    return clip_path
+end
+
+-- Clipboard content
+M.Content = {
+    IMAGE = "0",
+    FURL  = "1",
+    UNSUPPORTED = "2"
+}
+
+--- Get information about clipboard content
+---@return table: Table containing the Content, Ext and Path
+M.get_clipboard_info = function()
+    local reported_type = osascript_get_clip_content()
+
+    if reported_type:find("PNGf") or reported_type:find("TIFF") then
+        return { Type = M.Content.IMAGE, Path = "" , Ext = ".png"}
+    end
+
+    if reported_type:find("furl") then
+        local clip_path = osascript_get_clip_path()
+
+        if is_path_to_img(clip_path) then
+            local extension = "." .. vim.fn.fnamemodify(clip_path, ":e")
+            return { Type = M.Content.FURL, Path = clip_path, Ext = extension }
+        end
+    end
+
+    return { Type = M.Content.UNSUPPORTED, Path = "", Ext = "" }
+end
+
+-- Save image from clipboard to disk
+--
+---@param dst_path string: Path where the image will be saved to
+M.save_clipboard_to = function(dst_path)
+    -- Generate random tmp file. We need to do this because
+    -- osascript requires folder and filename but we want to
+    -- use only a path as function parameter
+    local tmpdir = uv.os_tmpdir()
+    local randname = generate_random_string()
+    local tmp_path = string.format("%s/%s", tmpdir, randname)
+
+    -- Save image as PNG from clipboard to tmp_path
+    local clip_command = 'osascript' ..
+            ' -e "tell application \\"System Events\\" to' ..
+            ' write (the clipboard as «class PNGf») to' ..
+            ' (make new file at folder \\"' .. tmpdir .. '\\"' ..
+            ' with properties {name:\\"'.. randname .. '\\"})"'
+    os.execute(clip_command)
+
+    assert(uv.fs_copyfile(tmp_path, dst_path))
+    assert(os.remove(tmp_path))
+end
+
+return M

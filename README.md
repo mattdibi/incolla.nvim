@@ -32,12 +32,13 @@ In you Neovim configuration directory, create a new file inside the `after/plugi
 
 ```lua
 require("incolla").setup {
+    -- Default configuration for all filetype
     defaults = {
         img_dir = "imgs",
         img_name = function()
             return os.date('%Y-%m-%d-%H-%M-%S')
         end,
-        affix = "![](%s)",
+        affix = "%s",
     }
 }
 ```

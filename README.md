@@ -26,7 +26,7 @@ use 'mattdibi/incolla.nvim'
 
 ### Usage
 
-**Paste image from clipboard screenshot**
+**Paste screenshot from clipboard**
 
 ![IncollaBasic](https://user-images.githubusercontent.com/22748355/210150002-135316ea-5574-443c-b71b-cc089784df7e.gif)
 

@@ -30,7 +30,7 @@ end
 --- Usage:
 --- <code>
 --- require('incolla').setup{
----   options = {
+---   defaults = {
 ---     -- Configuration for incolla.nvim goes here:
 ---     -- key = value,
 ---     -- ..

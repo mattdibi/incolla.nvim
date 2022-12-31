@@ -41,7 +41,7 @@ end
 M.setup = function(opts)
     opts = opts or {}
 
-    config.set(opts.options)
+    config.set(opts)
 end
 
 --- Main incolla.nvim function
@@ -58,14 +58,17 @@ M.incolla = function()
         return
     end
 
+    -- Get configuration by filetype
+    local ftconfig = config.get(vim.bo[buf].filetype)
+
     -- Compute filename
-    local configured_name = config.options.img_name()
+    local configured_name = ftconfig.img_name()
     assert(type(configured_name) == "string")
     local file_name = configured_name .. clip.Ext
 
     -- Compute destination path
     -- NOTE: It's always relative to *the file open in the current buffer*
-    local imgdir = config.options.img_dir
+    local imgdir = ftconfig.img_dir
     local dst_path = string.format("%s/%s/%s", vim.fn.expand('%:p:h'), imgdir, file_name)
 
     if fsutils.file_exists(dst_path) then
@@ -89,7 +92,7 @@ M.incolla = function()
 
     -- Add text at current position using relative path
     local rel_path = string.format("./%s/%s", imgdir, file_name)
-    local text = string.format(config.options.affix, rel_path)
+    local text = string.format(ftconfig.affix, rel_path)
     write_text(text)
 end
 

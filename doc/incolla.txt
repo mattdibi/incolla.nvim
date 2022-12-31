@@ -1,7 +1,39 @@
-*incolla*             for Neovim 0.7+        Last modified: 31 Dec 2022
+*incolla.nvim*             for Neovim 0.7+           Last modified: 31 Dec 2022
 
 Author: Mattia Dal Ben
 Repo: <github.com/mattdibi/incolla.nvim>
 License: MIT
 
-=======================================================================
+===============================================================================
+CONTENTS                                             *incolla.nvim-contents*
+  1. Introduction                                |incolla.nvim-introduction|
+  2. Requirements                                 |incolla.nvim-requirement|
+  3. Usage                                              |incolla.nvim-usage|
+    3.1. Commands                                    |incolla.nvim-commands|
+
+NOTE:
+  Press CTRL-] on the highlighted words to jump to the corresponding tag. Press
+  CTRL-T to come back. See `:help tag` for more info.
+
+===============================================================================
+INTRODUCTION                                     *incolla.nvim-introduction*
+
+Incolla.nvim is a neovim plugin to paste images from your clipboard.
+To configure this plugin, see |incolla.nvim-config|.
+
+===============================================================================
+REQUIREMENTS                                      *incolla.nvim-requirement*
+
+incolla.nvim only works on Neovim version 0.7+ on MacOS.
+
+===============================================================================
+USAGE                                                   *incolla.nvim-usage*
+
+See the available commands on |incolla.nvim-commands| & Lua api/functions on
+|incolla.nvim-functions|.
+
+                                                     *incolla.nvim-commands*
+Commands~
+
+`:Incolla`                                                        *:Incolla*
+    This is the command to paste image from your clipboard.

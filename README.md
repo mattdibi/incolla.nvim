@@ -30,14 +30,19 @@ use 'mattdibi/incolla.nvim'
 
 ![IncollaBasic](https://user-images.githubusercontent.com/22748355/210150002-135316ea-5574-443c-b71b-cc089784df7e.gif)
 
-**Paste image from clipboard URL**
+<details>
+<summary><b>Paste image from clipboard URL</b></summary></br>
 
 ![IncollaURL](https://user-images.githubusercontent.com/22748355/210150024-41c94e32-d688-4e8a-bb68-c42c1c8fbf7b.gif)
 
-**Paste image copied from the browser**
+</details>
+
+<details>
+<summary><b>Paste image copied from the browser</b></summary></br>
 
 ![IncollaBrowser](https://user-images.githubusercontent.com/22748355/210150032-376ead8a-ff21-433e-a9f0-7dec4ac58fd5.gif)
 
+</details>
 
 ### Configuration
 

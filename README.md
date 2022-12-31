@@ -26,6 +26,26 @@ use 'mattdibi/incolla.nvim'
 
 ### Configuration
 
+Incolla.nvim doesn't require any configuration to work out-of-the box. The default configuration is the following:
+
+```lua
+local DEFAULTS = {
+    img_dir = "imgs",
+    img_name = function()
+        return os.date("IMG-%d-%m-%Y-%H-%M-%S")
+    end,
+    affix = "%s",
+}
+```
+
+Where:
+
+- `img_dir`: Directory where the image from clipboard will be copied to
+- `img_name`: Image's name on disk
+- `affix`: String that sandwiches the image's path and will be written in your open buffer
+
+If you want to customize the behaviour of the plugin you can look at the following section.
+
 **Example**
 
 In you Neovim configuration directory, create a new file inside the `after/plugin` directory with the following:

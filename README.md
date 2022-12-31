@@ -62,10 +62,12 @@ vim.api.nvim_set_keymap('n', '<leader>xp', '', {
 ```
 
 <details>
-<summary><b>Vimscript</b></summary>
+<summary><b>Vimscript</b></summary></br>
+
 ```vimscript
 nnoremap <leader>xp :Incolla<CR>
 ```
+
 </details>
 
 ### Credits

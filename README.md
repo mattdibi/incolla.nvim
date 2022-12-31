@@ -41,3 +41,9 @@ require("incolla").setup {
     }
 }
 ```
+
+### Credits
+
+Thanks to:
+- [https://github.com/ekickx/clipboard-image.nvim](https://github.com/ekickx/clipboard-image.nvim)
+- [https://github.com/img-paste-devs/img-paste.vim](https://github.com/img-paste-devs/img-paste.vim)

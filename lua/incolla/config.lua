@@ -10,20 +10,20 @@ local DEFAULTS = {
 }
 
 -- Configuration options table
-M.options = DEFAULTS
+M.defaults = DEFAULTS
 
 -- Sets plugin configuration options
 --
 ---@param opts table: Table containing configuration options
 M.set = function(opts)
     -- Defaults
-    M.options.img_dir = opts.options.img_dir or DEFAULTS.img_dir
-    M.options.img_name = opts.options.img_name or DEFAULTS.img_name
-    M.options.affix = opts.options.affix or DEFAULTS.affix
+    M.defaults.img_dir = opts.defaults.img_dir or DEFAULTS.img_dir
+    M.defaults.img_name = opts.defaults.img_name or DEFAULTS.img_name
+    M.defaults.affix = opts.defaults.affix or DEFAULTS.affix
 
     -- Per filetype configuration
     for k, v in pairs(opts) do
-        if k == "options" then goto continue end
+        if k == "defaults" then goto continue end
 
         M[k] = {
             options = {
@@ -44,7 +44,7 @@ end
 ---@param filetype string
 ---@return table
 M.get = function(filetype)
-    return M[filetype] ~= nil and M[filetype].options or M.options
+    return M[filetype] ~= nil and M[filetype].options or M.defaults
 end
 
 return M

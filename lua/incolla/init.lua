@@ -41,6 +41,10 @@ end
 M.setup = function(opts)
     opts = opts or {}
 
+    if opts.default then
+        error "'default' is not a valid value for setup. See 'defaults'"
+    end
+
     config.set(opts)
 end
 

@@ -68,7 +68,7 @@ M.incolla = function()
         return
     end
 
-    local clip = clipboard.get_clipboard_info()
+    local clip = clipboard.get_info()
     if clip.Type == clipboard.Content.UNSUPPORTED then
         notify("Unsupported clipboard content", level.WARN)
         return
@@ -96,7 +96,7 @@ M.incolla = function()
     if clip.Type == clipboard.Content.IMAGE then
         -- Write new file to disk
         notify("Copy from clipboard", level.INFO)
-        clipboard.save_clipboard_to(dst_path)
+        clipboard.save_to(dst_path)
     elseif clip.Type == clipboard.Content.FURL then
         -- Copy file to destination
         notify("Copy from file url", level.INFO)

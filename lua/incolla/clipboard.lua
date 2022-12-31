@@ -51,7 +51,7 @@ M.Content = {
 
 --- Get information about clipboard content
 ---@return table: Table containing the Content, Ext and Path
-M.get_clipboard_info = function()
+M.get_info = function()
     local reported_type = osascript_get_clip_content()
 
     if reported_type:find("PNGf") or reported_type:find("TIFF") then
@@ -73,7 +73,7 @@ end
 -- Save image from clipboard to disk
 --
 ---@param dst_path string: Path where the image will be saved to
-M.save_clipboard_to = function(dst_path)
+M.save_to = function(dst_path)
     -- Generate random tmp file. We need to do this because
     -- osascript requires folder and filename but we want to
     -- use only a path as function parameter

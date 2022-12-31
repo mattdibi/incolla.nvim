@@ -1,4 +1,4 @@
-*incolla*             for Neovim 0.5+        Last modified: 27 Dec 2022
+*incolla*             for Neovim 0.7+        Last modified: 31 Dec 2022
 
 Author: Mattia Dal Ben
 Repo: <github.com/mattdibi/incolla.nvim>

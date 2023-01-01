@@ -44,10 +44,10 @@ incolla.setup({opts})                                        *incolla.setup()*
         disk. The function **must** return a string. Please note that if the
         clipboard content is a file URL, the original filename will be used.
 
-    affix:
+                                                           *incolla.affix*
+    affix: ~
         String that sandwiches the image's path and will be written in your 
         open buffer
-
 
 
 incolla.incolla()                                          *incolla.incolla()*

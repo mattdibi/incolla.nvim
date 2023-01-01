@@ -68,7 +68,10 @@ M.incolla = function()
     -- Compute filename
     local configured_name = ftconfig.img_name()
     assert(type(configured_name) == "string")
-    local file_name = configured_name .. clip.Ext
+    -- Use original name if FURL
+    local file_name = (clip.Type == clipboard.Content.FURL) and
+                        vim.fn.fnamemodify(clip.Path, ":t"):gsub("%s", "") or
+                        configured_name .. clip.Ext
 
     -- Compute destination path
     -- NOTE: It's always relative to *the file open in the current buffer*

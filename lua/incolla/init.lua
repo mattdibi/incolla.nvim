@@ -50,8 +50,7 @@ end
 
 --- Main incolla.nvim function
 M.incolla = function()
-    local buf = vim.api.nvim_win_get_buf(0)
-    if vim.bo[buf].readonly then
+    if vim.bo.readonly then
         notify("Buffer is readonly", level.WARN)
         return
     end
@@ -63,7 +62,7 @@ M.incolla = function()
     end
 
     -- Get configuration by filetype
-    local ftconfig = config.get(vim.bo[buf].filetype)
+    local ftconfig = config.get(vim.bo.filetype)
 
     -- Compute filename
     local configured_name = ftconfig.img_name()

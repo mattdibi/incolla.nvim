@@ -48,6 +48,14 @@ use 'mattdibi/incolla.nvim'
 
 </details>
 
+> **Note**: the fist time you run the `Incolla` function you'll need to grant "System Events.app" access to the destination folder.
+
+<div align="center">
+
+![immagine](https://user-images.githubusercontent.com/22748355/210182576-9aa6c19b-073f-4c66-aa62-0f94a876b81c.png)
+
+</div>
+
 ### ⚙️ Configuration
 
 Incolla.nvim doesn't require any configuration to work out-of-the box. The default configuration is the following:

@@ -1,7 +1,5 @@
 local M = {}
 
-local uv = vim.loop
-
 --- Check if path points to image file (uses file extension)
 ---
 ---@param path string: Path to check

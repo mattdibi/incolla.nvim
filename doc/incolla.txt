@@ -1,39 +1,48 @@
-*incolla.nvim*             for Neovim 0.7+           Last modified: 31 Dec 2022
+================================================================================
+INTRODUCTION                                                      *incolla.nvim*
 
-Author: Mattia Dal Ben
-Repo: <github.com/mattdibi/incolla.nvim>
-License: MIT
+incolla.nvim is a plugin for seamlessly pasting images from the MacOS clipboard
+into the open Neovim buffer.
 
-===============================================================================
-CONTENTS                                             *incolla.nvim-contents*
-  1. Introduction                                |incolla.nvim-introduction|
-  2. Requirements                                 |incolla.nvim-requirement|
-  3. Usage                                              |incolla.nvim-usage|
-    3.1. Commands                                    |incolla.nvim-commands|
+A practical introduction into incolla.nvim customization is our `README.md`
+(top-level of repo). To find out more:
+https://github.com/mattdibi/incolla.nvim
 
-NOTE:
-  Press CTRL-] on the highlighted words to jump to the corresponding tag. Press
-  CTRL-T to come back. See `:help tag` for more info.
+incolla.setup({opts})                                        *incolla.setup()*
+    Setup function to be run by user. Configures the defaults and the filetype
+    configurations of incolla.nvim
 
-===============================================================================
-INTRODUCTION                                     *incolla.nvim-introduction*
+    Usage:
+    >
+    require('incolla').setup{
+      defaults = {
+        -- Default configuration for incolla.nvim goes here:
+        -- img_dir = value,
+        -- ..
+      },
+      <filetype> = {
+        -- Per-filetype configuration goes here:
+        -- img_dir = value,
+        -- ..
+      }
+    }
+<
 
-Incolla.nvim is a neovim plugin to paste images from your clipboard.
-To configure this plugin, see |incolla.nvim-config|.
+incolla.incolla()                                          *incolla.incolla()*
+    Incolla.nvim main function. It is responsible for the main functionality
+    of the plugin.
 
-===============================================================================
-REQUIREMENTS                                      *incolla.nvim-requirement*
+    Once called it leverages AppleScript to:
+        - Retrieve informations about the clipboard content
+        - Save the clipboard content on disk if it's an image. Copy the image
+          to the destination directory in case is a file URL.
+        - Create the destination folder if it doesn't exists
+        - Update the current buffer with the image path according to the
+          `affix`
 
-incolla.nvim only works on Neovim version 0.7+ on MacOS.
-
-===============================================================================
-USAGE                                                   *incolla.nvim-usage*
-
-See the available commands on |incolla.nvim-commands| & Lua api/functions on
-|incolla.nvim-functions|.
-
-                                                     *incolla.nvim-commands*
-Commands~
+================================================================================
+COMMAND                                                 *incolla.nvim.command*
 
 `:Incolla`                                                        *:Incolla*
-    This is the command to paste image from your clipboard.
+    This is the command to paste image from your clipboard. It calls
+    `incolla.incolla()` under the hood.

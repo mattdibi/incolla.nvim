@@ -1,6 +1,6 @@
 <div align="center">
 
-## incolla.nvim
+# incolla.nvim
 
 ![](https://img.shields.io/badge/MacOS-000000?style=flat-square&logo=apple&logoColor=white)
 </br><a href="/LICENSE.md"> ![License](https://img.shields.io/badge/License-MIT-brightgreen?style=flat-square) </a>
@@ -8,6 +8,10 @@
 _Neovim Lua plugin to paste images from MacOS clipboard_
 
 </div>
+
+This plugin allows for seamless clipboard image pasting inside Neovim.
+
+It leverages AppleScript under the hood and thus require MacOS to work. Additionally this plugin requires Neovim 0.7 or higher. It makes use of Neovim only features so it will not work in Vim. 
 
 ### ✨ Features
 

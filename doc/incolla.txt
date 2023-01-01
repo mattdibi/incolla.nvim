@@ -27,6 +27,28 @@ incolla.setup({opts})                                        *incolla.setup()*
       }
     }
 <
+    Valid keys for {opts.defaults}
+
+                                                         *incolla.img_dir*
+    img_dir: ~
+        Directory where the image from clipboard will be copied to. Please
+        note that it will always will be referred to the currently open
+        buffer. This means that if the current open buffer is
+        `/home/user/path/file.txt` and the `img_dir` is set to `imgs`,
+        the image will be saved to `/home/user/path/imgs/<name>`.
+
+
+                                                        *incolla.img_name*
+    img_name: ~
+        Function used to determine image's name when it will be saved on
+        disk. The function **must** return a string. Please note that if the
+        clipboard content is a file URL, the original filename will be used.
+
+    affix:
+        String that sandwiches the image's path and will be written in your 
+        open buffer
+
+
 
 incolla.incolla()                                          *incolla.incolla()*
     Incolla.nvim main function. It is responsible for the main functionality

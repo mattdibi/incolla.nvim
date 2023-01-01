@@ -27,7 +27,7 @@ end
 --- Get clipboard content informations using osascript
 ---@return string
 local osascript_get_clip_content = function()
-    local clip_info = tostring(io.popen('osascript -e "clipboard info"'):read())
+    local clip_info = tostring(io.popen('osascript -e "clipboard info" 2>/dev/null'):read())
     -- Retrieve header info (i.e. up until the first ",")
     local trimmed_info = clip_info:match("[^,]+")
     return trimmed_info

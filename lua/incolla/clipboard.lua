@@ -13,17 +13,6 @@ local is_path_to_img = function(path)
            extension == "webp"
 end
 
--- Generate random string for temporary file
-local generate_random_string = function()
-    math.randomseed(os.time())
-    local random = "incolla_"
-    for _ = 1, 20 do
-        random = random .. string.char(math.random(97, 97 + 25))
-    end
-
-    return random
-end
-
 --- Get clipboard content informations using osascript
 ---@return string
 local osascript_get_clip_content = function()
@@ -74,23 +63,17 @@ end
 --
 ---@param dst_path string: Path where the image will be saved to
 M.save_to = function(dst_path)
-    -- Generate random tmp file. We need to do this because
-    -- osascript requires folder and filename but we want to
-    -- use only a path as function parameter
-    local tmpdir = uv.os_tmpdir()
-    local randname = generate_random_string()
-    local tmp_path = string.format("%s/%s", tmpdir, randname)
+    local dst_dir  = vim.fn.fnamemodify(dst_path, ":p:h")
+    local dst_name = vim.fn.fnamemodify(dst_path, ":t")
 
     -- Save image as PNG from clipboard to tmp_path
     local clip_command = 'osascript' ..
             ' -e "tell application \\"System Events\\" to' ..
             ' write (the clipboard as «class PNGf») to' ..
-            ' (make new file at folder \\"' .. tmpdir .. '\\"' ..
-            ' with properties {name:\\"'.. randname .. '\\"})"'
-    os.execute(clip_command)
+            ' (make new file at folder \\"' .. dst_dir .. '\\"' ..
+            ' with properties {name:\\"'.. dst_name .. '\\"})"'
 
-    assert(uv.fs_copyfile(tmp_path, dst_path))
-    assert(os.remove(tmp_path))
+    os.execute(clip_command)
 end
 
 return M

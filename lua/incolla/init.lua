@@ -75,8 +75,8 @@ M.incolla = function()
 
     -- Ask user for filename
     local fname = vim.fn.input("Enter filename: ", "", "file")
-    notify(string.format("Filename chosen: %s", fname), level.INFO)
-    if fname ~= nil and fname ~= "" then
+    if fname ~= nil and fname ~= "" then -- TODO: Check filename is valid
+        -- Override configured filename
         file_name = fname .. clip.Ext
     end
 

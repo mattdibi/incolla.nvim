@@ -48,6 +48,8 @@ M.setup = function(opts)
     config.set(opts)
 end
 
+
+
 --- Main incolla.nvim function
 M.incolla = function()
     if vim.bo.readonly then
@@ -71,6 +73,14 @@ M.incolla = function()
     local file_name = (clip.Type == clipboard.Content.FURL) and
                         vim.fn.fnamemodify(clip.Path, ":t"):gsub("%s", "") or
                         configured_name .. clip.Ext
+
+
+    -- Ask user for filename
+    local fname = vim.fn.input("Enter filename: ", "", "file")
+    notify(string.format("Filename chosen: %s", fname), level.INFO)
+    if fname ~= nil and fname ~= "" then
+        file_name = fname .. clip.Ext
+    end
 
     -- Compute destination path
     -- NOTE: It's always relative to *the file open in the current buffer*

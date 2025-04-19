@@ -48,8 +48,6 @@ M.setup = function(opts)
     config.set(opts)
 end
 
-
-
 --- Main incolla.nvim function
 M.incolla = function()
     if vim.bo.readonly then

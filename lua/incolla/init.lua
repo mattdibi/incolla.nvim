@@ -112,17 +112,19 @@ M.incolla = function()
                         configured_name .. clip.Ext
 
     -- Ask user for filename and use it to override the default one
-    vim.ui.input({ prompt = '[Incolla] Enter filename without extension: ' }, function(input)
-        if input and input ~= "" then
-            file_name = trim(input) .. clip.Ext
-        end
-        vim.api.nvim_echo({{" "}}, false, {}) -- Clear messages
-    end)
+    if ftconfig.prompt_filename then
+        vim.ui.input({ prompt = '[Incolla] Enter filename without extension: ' }, function(input)
+            if input and input ~= "" then
+                file_name = trim(input) .. clip.Ext
+            end
+            vim.api.nvim_echo({{" "}}, false, {}) -- Clear messages
+        end)
 
-    local valid, err = is_valid_filename(file_name:match("(.+)%..+$"))
-    if not valid then
-        notify("Invalid filename: " .. err, level.WARN)
-        return
+        local valid, err = is_valid_filename(file_name:match("(.+)%..+$"))
+        if not valid then
+            notify("Invalid filename: " .. err, level.WARN)
+            return
+        end
     end
 
 

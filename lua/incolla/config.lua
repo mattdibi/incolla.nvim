@@ -7,6 +7,7 @@ local DEFAULTS = {
         return os.date("IMG-%d-%m-%Y-%H-%M-%S")
     end,
     affix = "%s",
+    prompt_filename = false,
 }
 
 -- Configuration options table
@@ -20,6 +21,7 @@ M.set = function(opts)
         M.defaults.img_dir = opts.defaults.img_dir or DEFAULTS.img_dir
         M.defaults.img_name = opts.defaults.img_name or DEFAULTS.img_name
         M.defaults.affix = opts.defaults.affix or DEFAULTS.affix
+        M.defaults.prompt_filename = opts.defaults.prompt_filename or DEFAULTS.prompt_filename
     end
 
     -- Per filetype configuration
@@ -29,7 +31,8 @@ M.set = function(opts)
         M[k] = {
             img_dir = v.img_dir or M.defaults.img_dir,
             img_name = v.img_name or M.defaults.img_name,
-            affix = v.affix or M.defaults.affix
+            affix = v.affix or M.defaults.affix,
+            prompt_filename = v.prompt_filename or M.defaults.prompt_filename
         }
 
         ::continue::

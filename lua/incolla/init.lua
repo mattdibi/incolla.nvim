@@ -56,6 +56,13 @@ local function is_valid_filename(file_name)
     return true
 end
 
+-- String trimming
+--
+--@param str string: string to be trimmed
+local function trim(s)
+    assert(type(s) == "string")
+    return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
 
 --- Setup function to be run by user. Configures incolla.nvim
 ---
@@ -107,7 +114,7 @@ M.incolla = function()
     -- Ask user for filename and use it to override the default one
     vim.ui.input({ prompt = '[Incolla] Enter filename without extension: ' }, function(input)
         if input and input ~= "" then
-            file_name = input .. clip.Ext
+            file_name = trim(input) .. clip.Ext
         end
         vim.api.nvim_echo({{" "}}, false, {}) -- Clear messages
     end)

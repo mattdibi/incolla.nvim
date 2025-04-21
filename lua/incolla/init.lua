@@ -59,9 +59,9 @@ end
 -- String trimming
 --
 --@param str string: string to be trimmed
-local function trim(s)
-    assert(type(s) == "string")
-    return (s:gsub("^%s*(.-)%s*$", "%1"))
+local function trim(str)
+    assert(type(str) == "string")
+    return (str:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 --- Setup function to be run by user. Configures incolla.nvim

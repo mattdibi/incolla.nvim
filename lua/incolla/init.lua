@@ -127,7 +127,6 @@ M.incolla = function()
         end
     end
 
-
     -- Compute destination path
     -- NOTE: It's always relative to *the file open in the current buffer*
     local imgdir = ftconfig.img_dir

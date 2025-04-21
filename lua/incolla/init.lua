@@ -25,6 +25,38 @@ local write_text = function(text)
     vim.api.nvim_set_current_line(nline)
 end
 
+-- Check whether the filename is valid on MacOS
+--
+--@param file_name string: Filename to be checked
+local function is_valid_filename(file_name)
+    if type(file_name) ~= "string" or file_name == "" then
+        return false, "Filename must be a non-empty string"
+    end
+
+    -- Disallow reserved names
+    if file_name == "." or file_name == ".." then
+        return false, "Filename cannot be '.' or '..'"
+    end
+
+    -- Disallow path separators and colon
+    if file_name:find("[/:]") then
+        return false, "Filename cannot contain '/' or ':'"
+    end
+
+    -- Disallow control characters
+    if file_name:find("[%c]") then
+        return false, "Filename contains control characters"
+    end
+
+    -- Optional: trim whitespace and ensure it's not all spaces
+    if file_name:match("^%s*$") then
+        return false, "Filename cannot be only whitespace"
+    end
+
+    return true
+end
+
+
 --- Setup function to be run by user. Configures incolla.nvim
 ---
 --- Usage:
@@ -72,16 +104,20 @@ M.incolla = function()
                         vim.fn.fnamemodify(clip.Path, ":t"):gsub("%s", "") or
                         configured_name .. clip.Ext
 
-
-    -- Ask user for filename
-    local fname = nil
-    vim.ui.input({ prompt = '[Incolla] Enter filename: ' }, function(input)
-        fname = input
+    -- Ask user for filename and use it to override the default one
+    vim.ui.input({ prompt = '[Incolla] Enter filename without extension: ' }, function(input)
+        if input and input ~= "" then
+            file_name = input .. clip.Ext
+        end
+        vim.api.nvim_echo({{" "}}, false, {}) -- Clear messages
     end)
-    if fname ~= nil and fname ~= "" then -- TODO: Check filename is valid
-        -- Override configured filename
-        file_name = fname .. clip.Ext
+
+    local valid, err = is_valid_filename(file_name:match("(.+)%..+$"))
+    if not valid then
+        notify("Invalid filename: " .. err, level.WARN)
+        return
     end
+
 
     -- Compute destination path
     -- NOTE: It's always relative to *the file open in the current buffer*

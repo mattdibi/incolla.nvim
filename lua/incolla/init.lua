@@ -113,7 +113,7 @@ M.incolla = function()
 
     -- Ask user for filename and use it to override the default one
     if ftconfig.prompt_filename then
-        vim.ui.input({ prompt = '[Incolla] Enter filename without extension: ' }, function(input)
+        vim.ui.input({ prompt = '[Incolla] Enter filename: ' }, function(input)
             if input and input ~= "" then
                 file_name = trim(input) .. clip.Ext
             end

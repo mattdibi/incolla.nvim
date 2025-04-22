@@ -75,6 +75,7 @@ Where:
 - `img_dir`: Directory where the image from clipboard will be copied to
 - `img_name`: Image's name on disk
 - `affix`: String that sandwiches the image's path and will be written in your open buffer
+- `prompt_filename`: If set to `true`, Incolla will ask the user for the image filename (i.e. overrides `img_name` if a filename is given).
 
 If you want to customize the behaviour of the plugin you can look at the following section.
 
@@ -91,6 +92,7 @@ require("incolla").setup {
             return os.date('%Y-%m-%d-%H-%M-%S')
         end,
         affix = "%s",
+        prompt_filename = false,
     },
     -- You can customize the behaviour for a filetype by creating a field named after the desired filetype
     -- If you're uncertain what to name your field to, you can run `lua print(vim.bo.filetype)`

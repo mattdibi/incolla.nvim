@@ -112,23 +112,23 @@ M.incolla = function()
                         configured_name .. clip.Ext
 
     -- Ask user for filename and use it to override the default one
-    local user_filename = nil
     if ftconfig.prompt_filename then
+        local user_filename = nil
+
         vim.ui.input({ prompt = '[Incolla] Enter filename: ' }, function(input)
-            user_filename = trim(input)
+            user_filename = trim(input or "")
             vim.api.nvim_echo({{" "}}, false, {}) -- Clear messages
         end)
 
         -- If a filename was provided check for validity. If valid, override
         -- the auto-generated one, otherwise log error and quit
-        if user_filename and user_filename ~= "" then
+        if user_filename ~= "" then
             local valid, err = is_valid_filename(user_filename)
-            if valid then
-                file_name = user_filename .. clip.Ext
-            else
+            if not valid then
                 notify("Invalid filename: " .. err, level.WARN)
                 return
             end
+            file_name = user_filename .. clip.Ext
         end
     end
 

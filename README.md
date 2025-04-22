@@ -17,7 +17,7 @@ It leverages AppleScript under the hood and thus require MacOS to work. Addition
 
 - No dependencies
 - Multiple image format supported (JPG, PNG ...)
-- Easy extensibility and configuration
+- Easily extendible and configurable
 - Written entirely in Lua
 
 ### 📦 Installation
@@ -67,6 +67,7 @@ defaults = {
         return os.date("IMG-%d-%m-%Y-%H-%M-%S")
     end,
     affix = "%s",
+    prompt_filename = false,
 }
 ```
 
@@ -92,7 +93,7 @@ require("incolla").setup {
             return os.date('%Y-%m-%d-%H-%M-%S')
         end,
         affix = "%s",
-        prompt_filename = false,
+        prompt_filename = true,
     },
     -- You can customize the behaviour for a filetype by creating a field named after the desired filetype
     -- If you're uncertain what to name your field to, you can run `lua print(vim.bo.filetype)`

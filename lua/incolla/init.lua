@@ -111,7 +111,7 @@ M.incolla = function()
                         vim.fn.fnamemodify(clip.Path, ":t"):gsub("%s", "") or
                         configured_name .. clip.Ext
 
-    -- Ask user for filename and use it to override the default one
+    -- Ask user for filename and, if provided, use it to override the auto-generated one
     if ftconfig.prompt_filename then
         local user_filename = nil
 
@@ -120,8 +120,6 @@ M.incolla = function()
             vim.api.nvim_echo({{" "}}, false, {}) -- Clear messages
         end)
 
-        -- If a filename was provided check for validity. If valid, override
-        -- the auto-generated one, otherwise log error and quit
         if user_filename ~= "" then
             local valid, err = is_valid_filename(user_filename)
             if not valid then

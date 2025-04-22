@@ -82,7 +82,7 @@ If you want to customize the behaviour of the plugin you can look at the followi
 
 **Example**
 
-In you Neovim configuration directory, create a new file inside the `after/plugin` directory with the following:
+In your Neovim configuration directory, create a new file inside the `after/plugin` directory with the following content:
 
 ```lua
 require("incolla").setup {

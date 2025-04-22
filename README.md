@@ -93,7 +93,7 @@ require("incolla").setup {
             return os.date('%Y-%m-%d-%H-%M-%S')
         end,
         affix = "%s",
-        prompt_filename = true,
+        prompt_filename = false,
     },
     -- You can customize the behaviour for a filetype by creating a field named after the desired filetype
     -- If you're uncertain what to name your field to, you can run `lua print(vim.bo.filetype)`

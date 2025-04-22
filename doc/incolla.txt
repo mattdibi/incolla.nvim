@@ -55,6 +55,13 @@ incolla.setup({opts})                                        *incolla.setup()*
         String that sandwiches the image's path and will be written in your 
         open buffer
 
+                                                   *incolla.prompt_filename*
+    prompt_filename: ~
+        Boolean enabling/disabling the filename prompt when an image is
+        pasted. If set to true, Incolla will ask the user for the image
+        filename, if none is given it will fallback to the one set by the
+        img_name parameter.
+
 
 incolla.incolla()                                          *incolla.incolla()*
     Incolla.nvim main function. It is responsible for the main functionality
